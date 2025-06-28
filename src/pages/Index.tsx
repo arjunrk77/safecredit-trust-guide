@@ -1,14 +1,27 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState, useEffect } from 'react';
+import { Onboarding } from '@/components/Onboarding';
+import { MainApp } from '@/components/MainApp';
 
 const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+
+  useEffect(() => {
+    // Check if user has completed onboarding
+    const onboardingStatus = localStorage.getItem('safecredit_onboarding_complete');
+    setHasCompletedOnboarding(onboardingStatus === 'true');
+  }, []);
+
+  const handleOnboardingComplete = () => {
+    localStorage.setItem('safecredit_onboarding_complete', 'true');
+    setHasCompletedOnboarding(true);
+  };
+
+  if (!hasCompletedOnboarding) {
+    return <Onboarding onComplete={handleOnboardingComplete} />;
+  }
+
+  return <MainApp />;
 };
 
 export default Index;
